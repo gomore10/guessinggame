@@ -2,7 +2,7 @@ all: README.md
 
 README.md:
 	touch README.md
-	echo "#guessinggame.sh" > README.md
+	echo "# guessinggame.sh" > README.md
 	echo "make ran at: " >> README.md
 	date >> README.md
 	echo " " >> README.md
