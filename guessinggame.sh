@@ -1,15 +1,7 @@
 guessnum=0
-skip=2
-for i in $(ls -l)
+for i in $(ls -p | grep -v /)
 do
-	if [[ $(($skip % 9)) -eq 4 ]]
-	then
-		if [[ $i =~ ^- ]]
-		then
-			let guessnum=$guessnum+1
-		fi
-	fi
-	let skip=$skip+1
+	guessnum=$guessnum+1
 done
 
 function getguess {
@@ -17,15 +9,26 @@ function getguess {
 	read guess
 }
 
-getguess
-while [[ $guessnum -ne $guess ]]
-do
-	if [[ $guess -gt $guessnum ]]
+function evalguess {
+	if [[ $guess =~ ^[123456789][1234567890]*$ ]]
 	then
-		echo "Too high, try again"
+		if [[ $guessnum -lt $guess ]]
+		then
+	                echo "Too high, try again"
+	        elif [[ $guessnum -gt $guess ]]
+	        then
+		        echo "Too low, try again"
+		else
+			echo "Congratulations, that's correct!"
+	        fi
 	else
-		echo "Too low, try again"
+		echo "Must guess a positive number"
 	fi
+}
+
+guess=-1
+while [[ ! $guess =~ ^[123456789][1234567890]*$ || $guessnum -ne $guess ]]
+do
 	getguess
+	evalguess
 done
-echo "Congratulations, that's correct!"
